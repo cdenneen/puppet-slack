@@ -5,8 +5,8 @@ class slack (
   $slack_channel        = '#puppet',
   $slack_botname        = 'puppet',
   $slack_puppet_reports = undef,
-  $slack_puppet_dir     = '/etc/puppet',
-  $is_puppetmaster      = true,
+  $slack_puppet_dir     = '/etc/puppetlabs/puppet',
+  $is_puppetmaster      = false,
 ) {
 
   anchor {'slack::begin':}
@@ -23,7 +23,7 @@ class slack (
     case $::osfamily {
       'redhat','debian': {
         check_run::task { 'task_faraday_gem_install':
-          exec_command => '/usr/bin/puppetserver gem install faraday',
+          exec_command => '/opt/puppetlabs/bin/puppetserver gem install faraday',
           require      => Anchor['slack::begin'],
           before       => File["${slack_puppet_dir}/slack.yaml"],
         }
